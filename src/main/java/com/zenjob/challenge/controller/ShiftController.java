@@ -33,9 +33,9 @@ public class ShiftController {
     public ResponseDto<GetShiftsResponse> getShifts(@PathVariable("jobId") UUID uuid) {
         List<ShiftResponse> shiftResponses = jobService.getShifts(uuid).stream()
                 .map(shift -> ShiftResponse.builder()
-                        .id(uuid)
+                        .id(shift.getId())
                         .talentId(shift.getTalentId())
-                        .jobId(shift.getJob().getId())
+                        .jobId(uuid)
                         .start(shift.getCreatedAt())
                         .end(shift.getEndTime())
                         .build())
@@ -50,7 +50,7 @@ public class ShiftController {
     @PatchMapping(path = "/{id}/book")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void bookTalent(@PathVariable("id") UUID shiftId, @RequestBody @Valid ShiftController.BookTalentRequestDto dto) {
-        jobService.bookTalent(shiftId, dto.talent);
+        jobService.bookTalent(dto.talent, shiftId);
     }
 
     @NoArgsConstructor

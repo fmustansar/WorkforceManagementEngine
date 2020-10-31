@@ -24,20 +24,25 @@ public class JobService {
     private final ShiftRepository shiftRepository;
 
     public Job createJob(UUID uuid, LocalDate date1, LocalDate date2) {
+        final UUID companyId = UUID.randomUUID();
         Job job = Job.builder()
                 .id(uuid)
-                .companyId(UUID.randomUUID())
+                .companyId(companyId)
                 .startTime(date1.atTime(8, 0, 0).toInstant(ZoneOffset.UTC))
                 .endTime(date2.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
                 .build();
         job.setShifts(LongStream.range(0, ChronoUnit.DAYS.between(date1, date2))
                 .mapToObj(idx -> date1.plus(idx, ChronoUnit.DAYS))
-                .map(date -> Shift.builder()
-                        .id(UUID.randomUUID())
-                        .job(job)
-                        .startTime(date.atTime(8, 0, 0).toInstant(ZoneOffset.UTC))
-                        .endTime(date.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
-                        .build())
+                .map(date -> {
+                    final UUID id = UUID.randomUUID();
+                    System.out.println(id.toString());
+                    return Shift.builder()
+                            .id(id)
+                            .job(job)
+                            .startTime(date.atTime(8, 0, 0).toInstant(ZoneOffset.UTC))
+                            .endTime(date.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
+                            .build();
+                })
                 .collect(Collectors.toList()));
         return jobRepository.save(job);
     }
