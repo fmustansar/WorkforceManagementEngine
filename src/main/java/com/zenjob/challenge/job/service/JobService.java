@@ -1,9 +1,9 @@
-package com.zenjob.challenge.service;
+package com.zenjob.challenge.job.service;
 
-import com.zenjob.challenge.entity.Job;
-import com.zenjob.challenge.entity.Shift;
-import com.zenjob.challenge.repository.JobRepository;
-import com.zenjob.challenge.repository.ShiftRepository;
+import com.zenjob.challenge.job.entity.Job;
+import com.zenjob.challenge.shift.entity.Shift;
+import com.zenjob.challenge.job.repository.JobRepository;
+import com.zenjob.challenge.shift.repository.ShiftRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +35,7 @@ public class JobService {
                 .mapToObj(idx -> date1.plus(idx, ChronoUnit.DAYS))
                 .map(date -> {
                     final UUID id = UUID.randomUUID();
-                    System.out.println(id.toString());
+                    //System.out.println(id.toString());
                     return Shift.builder()
                             .id(id)
                             .job(job)
@@ -53,5 +53,9 @@ public class JobService {
 
     public void bookTalent(UUID talent, UUID shiftId) {
         shiftRepository.findById(shiftId).map(shift -> shiftRepository.save(shift.setTalentId(talent)));
+    }
+
+    public void cancel(UUID jobId) {
+        jobRepository.deleteById(jobId);
     }
 }

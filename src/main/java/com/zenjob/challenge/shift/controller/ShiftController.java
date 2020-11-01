@@ -1,7 +1,7 @@
-package com.zenjob.challenge.controller;
+package com.zenjob.challenge.shift.controller;
 
 import com.zenjob.challenge.dto.ResponseDto;
-import com.zenjob.challenge.service.JobService;
+import com.zenjob.challenge.job.service.JobService;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
